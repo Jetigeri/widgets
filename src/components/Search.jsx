@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Search = () => {
-  const [term, setTerm] = useState("");
+  const [term, setTerm] = useState("dogs");
   const [results, setResults] = useState([]);
 
   console.log(results);
@@ -22,29 +22,40 @@ const Search = () => {
       setResults(data.data.query.search);
     };
 
-    const timeoutId = setTimeout(() => {
+    if (term && !results.length) {
+      search();
+    } else {
+      const timeoutId = setTimeout(() => {
         if (term) {
           search();
         }
+      }, 500);
 
-    }, 500)
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
   }, [term]);
 
-  const renderedResults = results.map(result => {
-  return <div key={result.pageid} className="item">
-      <div className="right floated content">
-          <a href="" className="ui button"
-          href={`https://en.wikipedia.org?curid=${result.pageid}`}
-          >Go</a>
+  const renderedResults = results.map((result) => {
+    return (
+      <div key={result.pageid} className="item">
+        <div className="right floated content">
+          <a
+            href=""
+            className="ui button"
+            href={`https://en.wikipedia.org?curid=${result.pageid}`}
+          >
+            Go
+          </a>
+        </div>
+        <div className="content">
+          <div className="header">{result.title}</div>
+          <span dangerouslySetInnerHTML={{ __html: result.snippet }}></span>
+        </div>
       </div>
-      <div className="content">
-          <div className="header">
-              {result.title}
-          </div>
-          <span dangerouslySetInnerHTML={{__html: result.snippet}}></span>
-      </div>
-  </div>
-})
+    );
+  });
 
   return (
     <div className="ui form">
