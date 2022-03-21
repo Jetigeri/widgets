@@ -7,11 +7,9 @@ const Dropdown = (props) => {
   useEffect(() => {
     const onBodyClick = (event) => {
       if (ref.current.contains(event.target)) {
-        console.log("returned ⛔️")
         return;
       }
       setOpen(false);
-      console.log("fired onbodyClick bc event didnt contain target 🔥")
     };
     document.body.addEventListener("click", onBodyClick, { capture: true });
 
@@ -44,7 +42,7 @@ const Dropdown = (props) => {
     <div ref={ref} className="ui form">
       <div className="field">
         <label htmlFor="" className="label">
-          Select a Color
+          {props.label}
         </label>
         <div
           onClick={() => {
